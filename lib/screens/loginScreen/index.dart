@@ -13,6 +13,10 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _error = false;
   final AuthService _authService = AuthService();
 
+  void _onLoginSuccess(int userId) {
+    Navigator.pushNamed(context, '/dashboard', arguments: userId);
+  }
+
   Future<void> _authenticateUser(String email, String password) async {
     Map<String, dynamic> userData = {
       'username': email,
@@ -28,8 +32,7 @@ class _LoginScreenState extends State<LoginScreen> {
         setState(() {
           _isLoading = false;
         });
-        Navigator.pushReplacementNamed(context, '/dashboard',
-            arguments: response);
+        _onLoginSuccess(response['id']); // Chame a função _onLoginSuccess passando o ID do usuário retornado pela resposta.
       } else {
         setState(() {
           _isLoading = false;
@@ -81,7 +84,7 @@ class LoginForm extends StatefulWidget {
 
 class _LoginFormState extends State<LoginForm> {
   final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController();
+  final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
 
   @override
@@ -94,7 +97,7 @@ class _LoginFormState extends State<LoginForm> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TextFormField(
-              controller: _emailController,
+              controller: _usernameController,
               decoration: InputDecoration(
                 labelText: 'Email',
               ),
@@ -122,9 +125,9 @@ class _LoginFormState extends State<LoginForm> {
             ElevatedButton(
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
-                  final email = _emailController.text;
+                  final username = _usernameController.text;
                   final password = _passwordController.text;
-                  widget.onLogin(email, password);
+                  widget.onLogin(username, password);
                 }
               },
               child: Text('Entrar'),

@@ -1,61 +1,50 @@
 import 'package:flutter/material.dart';
 import 'package:wishlist/services/models/wishListService.dart';
 
-class DashboardScreen extends StatefulWidget {
-  static const String routeName = '/dashboard';
+class DashboardScreen extends StatelessWidget {
+  final int userId;
 
-  @override
-  _DashboardScreenState createState() => _DashboardScreenState();
-}
-
-class _DashboardScreenState extends State<DashboardScreen> {
-  dynamic response;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    response = ModalRoute.of(context)?.settings.arguments;
-  }
+  DashboardScreen({required this.userId});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Wishlist App'),
+        title: Text('Dashboard'),
       ),
-      body: Center(
-        //mostrar a lista de wishlists do usuario logado
-        child: FutureBuilder(
-          future: WishListService().getAll(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return ListView.builder(
-                itemCount: snapshot.data.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(snapshot.data[index]['nome']),
-                    subtitle: Text(snapshot.data[index]['descricao']),
-                    onTap: () {
-                      Navigator.pushNamed(context, '/dashboard/create-wishlist',
-                          arguments: snapshot.data[index]);
-                    },
-                  );
-                },
-              );
-            } else {
-              return CircularProgressIndicator();
-            }
-          },
-        ),
+      body: FutureBuilder(
+        future: WishListService().getWishListFromUser(userId),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (snapshot.hasError) {
+            return Center(
+              child: Text('Erro ao carregar a wishlist.'),
+            );
+          } else {
+            List<dynamic> wishlists = snapshot.data as List<
+                dynamic>; //List<dynamic> wishlists = snapshot.data as List<dynamic>; Faça a conversão para List<dynamic>
 
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pushNamed(context, '/dashboard/create-wishlist',
-              arguments: response);
+            return ListView.builder(
+              itemCount: wishlists.length,
+              itemBuilder: (context, index) {
+                Map<String, dynamic> wishlist =
+                    wishlists[index] as Map<String, dynamic>;
+                print(wishlist);
+                String name =
+                    wishlist['name'] as String; // Faça a conversão para String
+                return ListTile(
+                  title: Text(name),
+                  onTap: () {
+                    // Implemente a ação ao tocar em um item da lista, se necessário.
+                  },
+                );
+              },
+            );
+          }
         },
-        backgroundColor: Colors.green,
-        child: const Icon(Icons.add),
       ),
     );
   }

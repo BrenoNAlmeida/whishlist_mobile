@@ -20,7 +20,6 @@ class WishListService extends ApiService {
       Uri.parse(baseUrl + service + 'get_list_user_id/$id/'),
       headers: {'Content-Type': 'application/json'},
     );
-
     return await _handleResponse(response);
   }
 }

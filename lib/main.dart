@@ -4,22 +4,21 @@ import 'package:wishlist/screens/loginScreen/index.dart';
 import 'package:wishlist/screens/dashboardScreen/index.dart';
 
 void main() {
-  runApp(WishlistApp());
+  runApp(MyApp());
 }
-
-class WishlistApp extends StatelessWidget {
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Wishlist App',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      routes: {
-        '/': (context) => LoginScreen(),
-        '/dashboard': (context) => DashboardScreen(),
-        '/dashboard/create-wishlist': (context) => CreateWishlistScreen(),
+      home: LoginScreen(),
+      onGenerateRoute: (settings) {
+        if (settings.name == '/dashboard') {
+          final userId = settings.arguments as int; // Obtenha o ID do usuário passado como argumento.
+          return MaterialPageRoute(
+            builder: (context) => DashboardScreen(userId: userId), // Passe o ID do usuário para a tela de DashboardScreen.
+          );
+        }
       },
     );
   }
