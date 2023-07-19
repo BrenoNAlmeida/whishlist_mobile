@@ -6,6 +6,7 @@ import 'package:wishlist/screens/dashboardScreen/index.dart';
 void main() {
   runApp(MyApp());
 }
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -14,9 +15,11 @@ class MyApp extends StatelessWidget {
       home: LoginScreen(),
       onGenerateRoute: (settings) {
         if (settings.name == '/dashboard') {
-          final userId = settings.arguments as int; // Obtenha o ID do usuário passado como argumento.
+          final userId = settings.arguments
+              as int; // Obtenha o ID do usuário passado como argumento.
           return MaterialPageRoute(
-            builder: (context) => DashboardScreen(userId: userId), // Passe o ID do usuário para a tela de DashboardScreen.
+            builder: (context) => DashboardScreen(userId:userId), // Passe o ID do usuário para a tela de DashboardScreen.
+            
           );
         }
       },

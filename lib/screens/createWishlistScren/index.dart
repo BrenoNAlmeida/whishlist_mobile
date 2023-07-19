@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:wishlist/services/models/wishListService.dart';
+import 'package:wishlist/screens/dashboardScreen/index.dart';
 
 class CreateWishlistScreen extends StatefulWidget {
   static const routeName = '/create-wishlist-screen';
+  final int userId; // Adicione o atributo userId
+  CreateWishlistScreen({required this.userId});
 
   @override
   _CreateWishlistScreenState createState() => _CreateWishlistScreenState();
@@ -10,6 +13,7 @@ class CreateWishlistScreen extends StatefulWidget {
 
 class _CreateWishlistScreenState extends State<CreateWishlistScreen> {
   final WishListService _wishListService = WishListService();
+
   final _formKey = GlobalKey<FormState>();
   TextEditingController _nomeController = TextEditingController();
   TextEditingController _descricaoController = TextEditingController();
@@ -67,14 +71,20 @@ class _CreateWishlistScreenState extends State<CreateWishlistScreen> {
                     Map<String, dynamic> wishListData = {
                       'name': _nomeController.text,
                       'description': _descricaoController.text,
-                      'user': response['id'],
+                      'user': this.widget.userId,
                     };
                     try {
                       final responsePost =
                           await _wishListService.post(wishListData);
 
                       if (responsePost['statusCode'] == '201') {
-                        Navigator.pushReplacementNamed(context, '/dashboard');
+                        Navigator.pushNamedAndRemoveUntil(
+                          context,
+                          DashboardScreen.routeName,
+                          (route) =>
+                              false, // Remove todas as telas da pilha, exceto a DashboardScreen
+                          arguments: this.widget.userId,
+                        );
                       }
                     } catch (e) {
                       print(e);

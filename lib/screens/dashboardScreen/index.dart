@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:wishlist/services/models/wishListService.dart';
+import 'package:wishlist/screens/createListCreen/index.dart';
+import 'package:wishlist/screens/createWishlistScren/index.dart';
+
 
 class DashboardScreen extends StatelessWidget {
   final int userId;
+  static const routeName = '/dashboard';
 
   DashboardScreen({required this.userId});
+  
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +37,6 @@ class DashboardScreen extends StatelessWidget {
               itemBuilder: (context, index) {
                 Map<String, dynamic> wishlist =
                     wishlists[index] as Map<String, dynamic>;
-                print(wishlist);
                 String name =
                     wishlist['name'] as String; // Faça a conversão para String
                 return ListTile(
@@ -44,8 +48,24 @@ class DashboardScreen extends StatelessWidget {
               },
             );
           }
+          
         },
       ),
+
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => CreateWishlistScreen(userId: userId),
+            ),
+          );
+        },
+        child: Icon(Icons.add),
+      ),
     );
+    
+
+    
   }
 }
