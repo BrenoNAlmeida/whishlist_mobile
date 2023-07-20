@@ -76,16 +76,12 @@ class _CreateWishlistScreenState extends State<CreateWishlistScreen> {
                     try {
                       final responsePost =
                           await _wishListService.post(wishListData);
-
-                      if (responsePost['statusCode'] == '201') {
-                        Navigator.pushNamedAndRemoveUntil(
-                          context,
-                          DashboardScreen.routeName,
-                          (route) =>
-                              false, // Remove todas as telas da pilha, exceto a DashboardScreen
-                          arguments: this.widget.userId,
-                        );
-                      }
+                      Navigator.pushNamedAndRemoveUntil(
+                        context,
+                        DashboardScreen.routeName,
+                        (route) => false,
+                        arguments: this.widget.userId,
+                      );
                     } catch (e) {
                       print(e);
                     }

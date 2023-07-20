@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wishlist/services/models/wishListService.dart';
-import 'package:wishlist/screens/createListCreen/index.dart';
+import 'package:wishlist/screens/viewListScreen/index.dart';
 import 'package:wishlist/screens/createWishlistScren/index.dart';
 
 
@@ -42,7 +42,14 @@ class DashboardScreen extends StatelessWidget {
                 return ListTile(
                   title: Text(name),
                   onTap: () {
-                    // Implemente a ação ao tocar em um item da lista, se necessário.
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ViewListScreen(
+                          wishlistId: wishlist['id'] as int,
+                        ),
+                      ),
+                    );
                   },
                 );
               },
